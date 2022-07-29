@@ -455,7 +455,7 @@ public function myCard() {
 ctx()->reply(CQ::music("163", "730806")); //一首我喜欢的歌
 // 以内置的发送类型发送音乐卡片，我这里挑了网易云音乐的一首歌。
 
-ctx()->reply("custom", "https://baidu.com/", "https://zhamao.xin/file/hello.mp3", "我是Siri说出来的Hello", "不服来打我呀！", "https://zhamao.xin/file/hello.jpg");
+ctx()->reply(CQ::music("custom", "https://baidu.com/", "https://zhamao.xin/file/hello.mp3", "我是Siri说出来的Hello", "不服来打我呀！", "https://zhamao.xin/file/hello.jpg"));
 // 自定义整个卡片的每个内容
 ```
 
