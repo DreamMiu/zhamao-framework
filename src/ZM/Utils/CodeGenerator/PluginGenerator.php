@@ -6,6 +6,7 @@ namespace ZM\Utils\CodeGenerator;
 
 use ZM\Exception\FileSystemException;
 use ZM\Store\FileSystem;
+use ZM\Utils\ZMUtil;
 
 /**
  * Class PluginGenerator
@@ -81,11 +82,9 @@ class PluginGenerator
         file_put_contents(zm_dir($plugin_base_dir . '/composer.json'), json_encode($composer, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
         // TODO: 寻找 PHP 运行环境和 Composer 是否在当前目录的情况
         chdir($plugin_base_dir);
-        $env = getenv('COMPOSER_EXECUTABLE');
-        if ($env === false) {
-            $env = 'composer';
-        }
-        passthru(PHP_BINARY . ' ' . escapeshellcmd($env) . ' dump-autoload');
+        $env = ZMUtil::getComposerExecutable();
+        $cmd = $env === 'composer' ? $env . ' dump-autoload' : PHP_BINARY . ' ' . escapeshellcmd($env) . ' dump-autoload';
+        passthru($cmd);
         chdir(WORKING_DIR);
         return $plugin_base_dir;
     }

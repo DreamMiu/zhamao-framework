@@ -139,7 +139,8 @@ class AnnotationParser
                 }
             }
             */
-
+            // 保留ergodic注解
+            $append_ergodics = [];
             // 保存对class的注解
             $reflection_tree[$v]['class_annotations'] = $class_annotations;
             // 保存类成员的方法的对应反射对象们
@@ -153,6 +154,9 @@ class AnnotationParser
             foreach ($reflection_tree[$v]['class_annotations'] as $vs) {
                 $vs->class = $v;
 
+                if (in_array($vs::class, $conf['name'])) {
+                    continue;
+                }
                 // 预处理0：排除所有非继承于 AnnotationBase 的注解
                 if (!$vs instanceof AnnotationBase) {
                     logger()->notice($vs::class . ' is not extended from ' . AnnotationBase::class);
@@ -161,13 +165,16 @@ class AnnotationParser
 
                 // 预处理2：将适用于每一个函数的注解到类注解重新注解到每个函数下面
                 if ($vs instanceof ErgodicAnnotation) {
-                    foreach (($reflection_tree[$v]['methods'] ?? []) as $method) {
+                    foreach ($reflection_tree[$v]['methods'] as $method) {
                         // 用 clone 的目的是生成个独立的对象，避免和 class 以及方法之间互相冲突
                         $copy = clone $vs;
                         $copy->method = $method->getName();
-                        $reflection_tree[$v]['methods_annotations'][$method->getName()][] = $copy;
+                        $append_ergodics[$method->getName()][] = $copy;
+                        // $reflection_tree[$v]['methods_annotations'][$method->getName()][] = $copy;
                         $annotation_list[get_class($vs)][] = $copy;
                     }
+                    // 标记为 Ergodic 的类注解，不作为类的注解解析，而是全部当作每个方法有注解，所以直接跳过
+                    continue;
                 }
 
                 // 预处理3：调用自定义解析器
@@ -185,10 +192,19 @@ class AnnotationParser
                     $vs->group = array_merge($vs->group, $this->class_bind_group_list[get_class($vs)]);
                 }
             }
+            // 预处理：将Class的ergodic注解拼接到每个方法的注解列表前面，且按照顺序（修复 #365）
+            foreach (($reflection_tree[$v]['methods_annotations'] ?? []) as $method_name => $annos) {
+                if (isset($append_ergodics[$method_name])) {
+                    $reflection_tree[$v]['methods_annotations'][$method_name] = array_merge($append_ergodics[$method_name], $annos);
+                }
+            }
 
             // 预处理3：处理每个函数上面的特殊注解，就是需要操作一些东西的
             foreach (($reflection_tree[$v]['methods_annotations'] ?? []) as $method_name => $methods_annotations) {
                 foreach ($methods_annotations as $method_anno) {
+                    if (in_array($method_anno::class, $conf['name'])) {
+                        continue;
+                    }
                     // 预处理3.0：排除所有非继承于 AnnotationBase 的注解
                     if (!$method_anno instanceof AnnotationBase) {
                         logger()->notice('Binding annotation ' . $method_anno::class . ' to ' . $v . '::' . $method_name . ' is not extended from ' . AnnotationBase::class);

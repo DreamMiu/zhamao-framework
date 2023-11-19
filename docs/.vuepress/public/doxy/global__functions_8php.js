@@ -18,12 +18,17 @@ var global__functions_8php =
     [ "segment", "global__functions_8php.html#aab951b3aba3cafdec6df825656344148", null ],
     [ "sql_builder", "global__functions_8php.html#a5e5e46262ccc376a933859820eaee89f", null ],
     [ "ws_socket", "global__functions_8php.html#a3117291dc19c3820da1c3bbf65327e9d", null ],
+    [ "zm_create_app", "global__functions_8php.html#aa30c4407119a85820af29d6386961cd0", null ],
+    [ "zm_create_plugin", "global__functions_8php.html#a83464722ebd662fcd9ac2bdd01836c6c", null ],
     [ "zm_dir", "global__functions_8php.html#a5ffdd3528ee418f5b556be8335641705", null ],
     [ "zm_exec", "global__functions_8php.html#a49a9c9fabfe3e76c1535ea0a42407b15", null ],
     [ "zm_http_response", "global__functions_8php.html#ae77ae8234f42c23b690431e8313b8c69", null ],
     [ "zm_instance_id", "global__functions_8php.html#aedf626b8ff5c2b782908eb6756780eb7", null ],
     [ "zm_internal_errcode", "global__functions_8php.html#ab6532d66138e9cf91863546fc93556a1", null ],
     [ "zm_sleep", "global__functions_8php.html#a6195e0d6bb303cd1161beefcdc9173af", null ],
+    [ "zm_sqlite", "global__functions_8php.html#a14c2bc0d348a47906850ebf6e27a0d80", null ],
+    [ "zm_sqlite_builder", "global__functions_8php.html#a4695835e940bd86423eea04865b3e28d", null ],
     [ "zm_timer_after", "global__functions_8php.html#a79804576df10fd58f9d569e823e6aa9f", null ],
-    [ "zm_timer_tick", "global__functions_8php.html#a123ebc065b28f7c59b53a70d87b5e4ce", null ]
+    [ "zm_timer_tick", "global__functions_8php.html#a123ebc065b28f7c59b53a70d87b5e4ce", null ],
+    [ "zm_websocket_client", "global__functions_8php.html#a6063749774450cf71af3daf0ce7c32cc", null ]
 ];

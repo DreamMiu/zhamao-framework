@@ -29,6 +29,7 @@ module.exports = {
             { text: '指南', link: '/guide/' },
             { text: '事件', link: '/event/' },
             { text: '组件', link: '/components/bot/bot-context' },
+            { text: '插件', link: '/plugins/management' },
             { text: '进阶', link: '/advanced/' },
             { text: '更新日志', link: '/update/v3' },
             { text: 'API 文档', link: '/doxy/', target: '_blank' },
@@ -80,9 +81,11 @@ module.exports = {
                 {
                     title: 'HTTP 组件',
                     collapsable: true,
-                    sidebarDepth: 2,
+                    sidebarDepth: 1,
                     children: [
                         'http/zmrequest',
+                        'http/websocket-access',
+                        'http/websocket-client',
                     ],
                 },
                 {
@@ -99,7 +102,7 @@ module.exports = {
                 {
                     title: '存储组件',
                     collapsable: true,
-                    sidebarDepth: 2,
+                    sidebarDepth: 1,
                     children: [
                         'store/file-system',
                         'store/cache',
@@ -117,6 +120,18 @@ module.exports = {
                         'container/dependencies',
                     ],
                 }
+            ],
+            '/plugins/': [
+                {
+                    title: '插件系统',
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: [
+                        'management',
+                        'develop',
+                        'market',
+                    ]
+                },
             ],
             '/advanced/': [
                 {

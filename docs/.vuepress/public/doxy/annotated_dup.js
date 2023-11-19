@@ -42,6 +42,7 @@ var annotated_dup =
         [ "Closed", "class_z_m_1_1_annotation_1_1_closed.html", null ]
       ] ],
       [ "Bootstrap", "namespace_z_m_1_1_bootstrap.html", [
+        [ "Bootstrapper", "interface_z_m_1_1_bootstrap_1_1_bootstrapper.html", "interface_z_m_1_1_bootstrap_1_1_bootstrapper" ],
         [ "HandleExceptions", "class_z_m_1_1_bootstrap_1_1_handle_exceptions.html", "class_z_m_1_1_bootstrap_1_1_handle_exceptions" ],
         [ "LoadConfiguration", "class_z_m_1_1_bootstrap_1_1_load_configuration.html", "class_z_m_1_1_bootstrap_1_1_load_configuration" ],
         [ "LoadGlobalDefines", "class_z_m_1_1_bootstrap_1_1_load_global_defines.html", "class_z_m_1_1_bootstrap_1_1_load_global_defines" ],
@@ -63,7 +64,8 @@ var annotated_dup =
           [ "PluginInstallCommand", "class_z_m_1_1_command_1_1_plugin_1_1_plugin_install_command.html", "class_z_m_1_1_command_1_1_plugin_1_1_plugin_install_command" ],
           [ "PluginListCommand", "class_z_m_1_1_command_1_1_plugin_1_1_plugin_list_command.html", "class_z_m_1_1_command_1_1_plugin_1_1_plugin_list_command" ],
           [ "PluginMakeCommand", "class_z_m_1_1_command_1_1_plugin_1_1_plugin_make_command.html", "class_z_m_1_1_command_1_1_plugin_1_1_plugin_make_command" ],
-          [ "PluginPackCommand", "class_z_m_1_1_command_1_1_plugin_1_1_plugin_pack_command.html", "class_z_m_1_1_command_1_1_plugin_1_1_plugin_pack_command" ]
+          [ "PluginPackCommand", "class_z_m_1_1_command_1_1_plugin_1_1_plugin_pack_command.html", "class_z_m_1_1_command_1_1_plugin_1_1_plugin_pack_command" ],
+          [ "PluginRemoveCommand", "class_z_m_1_1_command_1_1_plugin_1_1_plugin_remove_command.html", "class_z_m_1_1_command_1_1_plugin_1_1_plugin_remove_command" ]
         ] ],
         [ "Server", "namespace_z_m_1_1_command_1_1_server.html", [
           [ "ServerCommand", "class_z_m_1_1_command_1_1_server_1_1_server_command.html", "class_z_m_1_1_command_1_1_server_1_1_server_command" ],
@@ -83,6 +85,7 @@ var annotated_dup =
         [ "ConfigTracer", "class_z_m_1_1_config_1_1_config_tracer.html", "class_z_m_1_1_config_1_1_config_tracer" ],
         [ "Environment", "class_z_m_1_1_config_1_1_environment.html", "class_z_m_1_1_config_1_1_environment" ],
         [ "EnvironmentInterface", "interface_z_m_1_1_config_1_1_environment_interface.html", "interface_z_m_1_1_config_1_1_environment_interface" ],
+        [ "RuntimePreferences", "class_z_m_1_1_config_1_1_runtime_preferences.html", "class_z_m_1_1_config_1_1_runtime_preferences" ],
         [ "ZMConfig", "class_z_m_1_1_config_1_1_z_m_config.html", "class_z_m_1_1_config_1_1_z_m_config" ]
       ] ],
       [ "Container", "namespace_z_m_1_1_container.html", [
@@ -114,6 +117,7 @@ var annotated_dup =
           [ "SolutionRepository", "class_z_m_1_1_exception_1_1_solution_1_1_solution_repository.html", "class_z_m_1_1_exception_1_1_solution_1_1_solution_repository" ]
         ] ],
         [ "ConfigException", "class_z_m_1_1_exception_1_1_config_exception.html", "class_z_m_1_1_exception_1_1_config_exception" ],
+        [ "DriverException", "class_z_m_1_1_exception_1_1_driver_exception.html", null ],
         [ "FileSystemException", "class_z_m_1_1_exception_1_1_file_system_exception.html", null ],
         [ "Handler", "class_z_m_1_1_exception_1_1_handler.html", "class_z_m_1_1_exception_1_1_handler" ],
         [ "InitException", "class_z_m_1_1_exception_1_1_init_exception.html", null ],

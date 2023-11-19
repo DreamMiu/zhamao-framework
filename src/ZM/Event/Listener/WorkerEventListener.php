@@ -95,7 +95,7 @@ class WorkerEventListener
         });
 
         // 注册各种池子
-        $this->initConnectionPool();
+        $this->initDBConnections();
 
         // 加载用户代码资源
         $this->initUserPlugins();
@@ -144,6 +144,7 @@ class WorkerEventListener
         if (is_a(config('global.kv.use', \LightCache::class), LightCache::class, true)) {
             LightCache::saveAll();
         }
+        DBPool::resetPortableSQLite();
         logger()->debug('{is_task}Worker 进程 #{id} 正在停止', ['is_task' => ProcessStateManager::isTaskWorker() ? 'Task' : '', 'id' => ProcessManager::getProcessId()]);
 
         if (Framework::getInstance()->getDriver()->getName() !== 'swoole') {
@@ -260,32 +261,10 @@ class WorkerEventListener
      *
      * @throws DBException|RedisException
      */
-    private function initConnectionPool(): void
+    private function initDBConnections(): void
     {
-        // 清空 MySQL 的连接池
-        foreach (DBPool::getAllPools() as $name => $pool) {
-            DBPool::destroyPool($name);
-        }
-        // 清空 Redis 连接池
-        foreach (RedisPool::getAllPools() as $name => $pool) {
-            RedisPool::destroyPool($name);
-        }
-
-        // 读取 MySQL/PostgresSQL/SQLite 配置文件并创建连接池
-        $conf = config('global.database');
-        // 如果有多个数据库连接，则遍历
-        foreach ($conf as $name => $conn_conf) {
-            if (($conn_conf['enable'] ?? true) !== false) {
-                DBPool::create($name, $conn_conf);
-            }
-        }
-
-        // 读取 Redis 配置文件并创建池
-        $redis_conf = config('global.redis');
-        foreach ($redis_conf as $name => $conn_conf) {
-            if (($conn_conf['enable'] ?? true) !== false) {
-                RedisPool::create($name, $conn_conf);
-            }
-        }
+        DBPool::resetPools();
+        DBPool::resetPortableSQLite();
+        RedisPool::resetPools();
     }
 }

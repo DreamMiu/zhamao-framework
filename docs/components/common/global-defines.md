@@ -213,7 +213,7 @@ container()->get('xxx');
 
 ### db()
 
-获取 Database 操作类。
+获取 Database 数据库连接操作类。
 
 - 定义：`db(string $name = '')`
 - 返回：`ZM\Store\Database\DBWrapper`
@@ -245,6 +245,16 @@ $result = db('mydb')->fetchAllAssociative('SELECT * FROM users WHERE username = 
 var_dump($result[0]); // 假设数据库表只有 id 和 username 两列，这里返回了 ['id' => 1, 'username' => 'jerry']
 ```
 
+有关此处数据库更详细的内容，请看 [SQL 数据库组件](/components/store/mysql.md)。
+
+### zm_sqlite()
+
+> 仅限于炸毛框架 3.2.0 及以上版本使用。
+
+获取一个便捷 SQLite 模式的数据库操作对象。
+
+有关此处数据库更详细的内容，请看 [SQL 数据库组件](/components/store/mysql.md)。
+
 ### sql_builder()
 
 使用 SQL 语句构建器构建一个查询。
@@ -260,6 +270,16 @@ var_dump($result[0]); // 假设数据库表只有 id 和 username 两列，这�
 $result = sql_builder('mydb')->select('*')->from('users')->where('username = :username')->setParameter('username', 'jerry')->execute()->fetchAllAssociative();
 // 结果与上方相同
 ```
+
+有关此处数据库更详细的内容，请看 [SQL 数据库组件](/components/store/mysql.md)。
+
+### zm_sqlite_builder()
+
+> 仅限于炸毛框架 3.2.0 及以上版本使用。
+
+获取一个便捷 SQLite 模式的数据库 SQL 语句构造器。
+
+有关此处数据库更详细的内容，请看 [SQL 数据库组件](/components/store/mysql.md)。
 
 ### redis()
 
@@ -382,3 +402,30 @@ public function testRoute(HttpRequestEvent $event)
 快速生成一个符合 PSR-7 的 HTTP Response 对象。
 
 有关参数，等同于 HttpFactory 对象，详见 HttpFactory 文档（TODO）。
+
+### ws_socket()
+
+获取驱动的 WebSocket 操作对象。
+
+定义：`function ws_socket(int $flag = 1): WSServerResponse`
+
+传入一个 flag 值（值为你在 `global.php` 中为 server 设置的 flag 值），返回对应端口的 WebSocket 操作对象。
+
+操作对象可以主动发送消息到指定客户端、可以获取指定端口的配置信息等。
+
+```php
+$socket = ws_socket();
+$socket->send('hello world', $event->getFd()); // 客户端的连接 fd 编号可以通过 WebSocketOpenEvent 等事件获取
+```
+
+### zm_create_app()
+
+创建一个炸毛框架的单文件应用（仅单文件，项目外非编写插件模式时可用），效果等同于 `new \ZM\ZMApplication()`。
+
+### zm_create_plugin()
+
+创建一个炸毛单文件模式的插件对象，效果等同于 `new \ZM\Plugin\ZMPlugin()`。
+
+### zm_websocket_client()
+
+创建一个 WebSocket 客户端。详情见 [框架内置 WebSocket 客户端](/components/http/websocket-client)。

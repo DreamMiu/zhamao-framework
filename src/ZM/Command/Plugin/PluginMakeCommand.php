@@ -18,15 +18,12 @@ class PluginMakeCommand extends PluginCommand
     {
         $this->addArgument('name', InputArgument::OPTIONAL, '插件名称', null);
         $this->addOption('author', 'a', InputOption::VALUE_OPTIONAL, '作者名称', null);
-        $this->addOption('description', 'd', InputOption::VALUE_OPTIONAL, '插件描述', null);
+        $this->addOption('description', null, InputOption::VALUE_OPTIONAL, '插件描述', null);
         $this->addOption('plugin-version', null, InputOption::VALUE_OPTIONAL, '插件版本', '1.0.0');
         $this->addOption('type', 'T', InputOption::VALUE_OPTIONAL, '插件类型', null);
 
         // 下面是 type=psr4 的选项
         $this->addOption('namespace', null, InputOption::VALUE_OPTIONAL, '插件命名空间', null);
-
-        // 下面是辅助用的，和 server:start 一样
-        $this->addOption('config-dir', null, InputOption::VALUE_REQUIRED, '指定其他配置文件目录');
     }
 
     /**

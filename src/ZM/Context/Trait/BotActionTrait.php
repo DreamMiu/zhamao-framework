@@ -58,8 +58,8 @@ trait BotActionTrait
         // 调用事件在回复之前的回调
         $handler = new AnnotationHandler(BotAction::class);
         container()->set(Action::class, $a);
-        $handler->setRuleCallback(fn (BotAction $act) => $act->action === '' || $act->action === $action && !$act->need_response);
-        $handler->handleAll($a);
+        $handler->setRuleCallback(fn (BotAction $act) => ($act->action === '' || $act->action === $action) && !$act->need_response);
+        $handler->handleAll();
         // 被阻断时候，就不发送了
         if ($handler->getStatus() === AnnotationHandler::STATUS_INTERRUPTED) {
             return false;
@@ -90,6 +90,10 @@ trait BotActionTrait
             BotMap::$bot_coroutines[$a->echo] = $co->getCid();
             $response = $co->suspend();
             if ($response instanceof ActionResponse) {
+                $handler = new AnnotationHandler(BotAction::class);
+                $handler->setRuleCallback(fn (BotAction $act) => ($act->action === '' || $act->action === $action) && $act->need_response);
+                container()->set(ActionResponse::class, $response);
+                $handler->handleAll();
                 return $response;
             }
             return false;

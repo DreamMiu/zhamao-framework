@@ -427,9 +427,11 @@ class OneBot12Adapter extends ZMPlugin
             // 调用 BotActionResponse 事件
             $handler = new AnnotationHandler(BotActionResponse::class);
             $handler->setRuleCallback(function (BotActionResponse $event) use ($resp) {
-                return $event->retcode === null || $event->retcode === $resp->retcode;
+                return ($event->retcode === null || $event->retcode === $resp->retcode)
+                    && ($event->status === null || $event->status === $resp->status);
             });
-            $handler->handleAll($resp);
+            container()->set(ActionResponse::class, $resp);
+            $handler->handleAll();
 
             // 如果有协程，并且该 echo 记录在案的话，就恢复协程
             BotContext::tryResume($resp);

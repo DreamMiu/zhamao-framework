@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
+use Choir\Http\Client\Exception\ClientException;
 use Choir\Http\HttpFactory;
 use OneBot\Driver\Coroutine\Adaptive;
 use OneBot\Driver\Coroutine\CoroutineInterface;
+use OneBot\Driver\Interfaces\WebSocketClientInterface;
 use OneBot\Driver\Process\ExecutionResult;
 use OneBot\Driver\Socket\WSServerSocketBase;
+use OneBot\Driver\Workerman\WebSocketClient;
 use OneBot\V12\Object\MessageSegment;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -14,16 +17,20 @@ use Psr\SimpleCache\CacheInterface;
 use ZM\Config\Environment;
 use ZM\Config\ZMConfig;
 use ZM\Container\ContainerHolder;
+use ZM\Exception\DriverException;
 use ZM\Framework;
 use ZM\Logger\ConsoleLogger;
 use ZM\Middleware\MiddlewareHandler;
 use ZM\Plugin\OneBot\BotMap;
+use ZM\Plugin\ZMPlugin;
 use ZM\Schedule\Timer;
 use ZM\Store\Database\DBException;
+use ZM\Store\Database\DBPool;
 use ZM\Store\Database\DBQueryBuilder;
 use ZM\Store\Database\DBWrapper;
 use ZM\Store\KV\KVInterface;
 use ZM\Store\KV\Redis\RedisWrapper;
+use ZM\ZMApplication;
 
 // 防止重复引用引发报错
 if (function_exists('zm_internal_errcode')) {
@@ -249,6 +256,32 @@ function sql_builder(string $name = ''): DBQueryBuilder
 }
 
 /**
+ * 获取一个便携 SQLite 操作类
+ *
+ * @param  string      $name       使用的 SQLite 连接文件名
+ * @param  bool        $create_new 是否在文件不存在时创建新的
+ * @param  bool        $keep_alive 是否维持 PDO 对象以便优化性能
+ * @throws DBException
+ */
+function zm_sqlite(string $name, bool $create_new = true, bool $keep_alive = true): DBWrapper
+{
+    return DBPool::createPortableSqlite($name, $create_new, $keep_alive);
+}
+
+/**
+ * 获取便携 SQLite 操作类的 SQL 语句构造器
+ *
+ * @param  string      $name       使用的 SQLite 连接文件名
+ * @param  bool        $create_new 是否在文件不存在时创建新的
+ * @param  bool        $keep_alive 是否维持 PDO 对象以便优化性能
+ * @throws DBException
+ */
+function zm_sqlite_builder(string $name, bool $create_new = true, bool $keep_alive = true): DBQueryBuilder
+{
+    return zm_sqlite($name, $create_new, $keep_alive)->createQueryBuilder();
+}
+
+/**
  * 获取 Redis 操作类
  *
  * @param string $name 使用的 Redis 连接名称
@@ -344,4 +377,38 @@ function ws_socket(int $flag = 1): WSServerSocketBase
         throw new Exception('找不到目标的 server socket，请检查 flag 值');
     }
     return $a;
+}
+
+/**
+ * 创建炸毛框架应用
+ */
+function zm_create_app(): ZMApplication
+{
+    return new ZMApplication();
+}
+
+/**
+ * 创建炸毛框架的插件对象
+ */
+function zm_create_plugin(): ZMPlugin
+{
+    return new ZMPlugin();
+}
+
+/**
+ * 创建一个 WebSocket 客户端
+ *
+ * @param  string          $address 接入地址，例如 ws://192.168.1.3:9998/
+ * @param  array           $header  请求头
+ * @param  null|mixed      $set     Swoole 驱动下传入的额外参数
+ * @throws DriverException
+ * @throws ClientException
+ */
+function zm_websocket_client(string $address, array $header = [], mixed $set = null): WebSocketClientInterface
+{
+    return match (Framework::getInstance()->getDriver()->getName()) {
+        'swoole' => \OneBot\Driver\Swoole\WebSocketClient::createFromAddress($address, $header, $set ?? ['websocket_mask' => true]),
+        'workerman' => WebSocketClient::createFromAddress($address, $header),
+        default => throw new DriverException('current driver is not supported for creating websocket client'),
+    };
 }
